@@ -27,19 +27,20 @@ var ROSPlot2 = (function() {
         this.maxx = null
         this.buffer = 5
 
-        if (topics instanceof Array) {
-            for (var i = 0; i < topics.length; i++) {
-                this.addplot(topics[i])
-            }
-        } else {
-            this.addplot(topics)
+        if (!(topics instanceof Array))
+            topics = topics.split(/\s*,\s*/)
+
+        for (var i = 0; i < topics.length; i+=2) {
+            this.addplot(topics.slice(i, i+2))
         }
     }
 
-    ROSPlot2.prototype.addplot = function(name) {
+    ROSPlot2.prototype.addplot = function(names) {
         var self = this
         var ros = this.ros
-        var names = name.split(/\s*,\s*/)
+
+        if (!(names instanceof Array))
+            names = names.split(/\s*,\s*/)
 
         var topic = {
             xname: names[0],
@@ -67,9 +68,9 @@ var ROSPlot2 = (function() {
 
         topic.xref = sub(topic.xname, topic.times, topic.xs, topic.ys);
         topic.yref = sub(topic.yname, topic.times, topic.ys, topic.xs);
-        this.topics.push(topic);
+        this.topics.push(topic)
 
-        if (this.topics.length = 1)
+        if (this.topics.length == 1)
             this.title = name
     }
 

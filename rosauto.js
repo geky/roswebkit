@@ -3,69 +3,91 @@
  * Copyright (c) 2013-2014, Christopher Haster (MIT License)
  */
 
-var roswebkit = function(bridgeport, mjpegport) {
+var roswebkit = (function() {
     var plots = [
-        { name: 'rosplot', plot: ROSPlot, 
-          params: ['lines','zero','miny','maxy','buffer'] },
-        { name: 'rosplot2', plot: ROSPlot2,
+        { name: 'rosplot', 
+          plot: ROSPlot, 
+          params: ['lines','zero','miny','maxy','buffer']
+        },
+        { name: 'rosplot2', 
+          plot: ROSPlot2,
           params: ['lines', 'zero', 'miny', 'maxy', 
-                   'minx', 'maxx', 'buffer'] },
-        { name: 'rosrange', plot: ROSRange,
-          params: ['zero', 'fill', 'min', 'max', 'buffer'] },
-        { name: 'rosrrange', plot: ROSRRange,
-          params: ['fill', 'max', 'deg', 'buffer'] },
-        { name: 'rosecho', plot: ROSEcho,
-          params: [] },
-        { name: 'roswatch', plot: ROSWatch,
-          params: ['quality', 'invert'] },
+                   'minx', 'maxx', 'buffer']
+        },
+        { name: 'rosrange', 
+          plot: ROSRange,
+          params: ['zero', 'fill', 'min', 'max', 'buffer']
+        },
+        { name: 'rosrrange', 
+          plot: ROSRRange,
+          params: ['fill', 'max', 'deg', 'buffer']
+        },
+        { name: 'rosecho', 
+          plot: ROSEcho,
+          params: []
+        },
+        { name: 'roswatch', 
+          plot: ROSWatch,
+          params: ['quality', 'invert']
+        },
     ]
 
-    var requestFrame = ( window.requestAnimationFrame       ||
-                         window.webkitRequestAnimationFrame ||
-                         window.mozRequestAnimationFrame    ||
-                         window.oRequestAnimationFrame      ||
-                         window.msRequestAnimationFrame     ||
-                         function(callback) { setInterval(callback, 100); } );
+    var requestFrame = (
+        window.requestAnimationFrame       ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame    ||
+        window.oRequestAnimationFrame      ||
+        window.msRequestAnimationFrame     ||
+        function(callback) { setInterval(callback, 100); } 
+    );
 
-    var ros = new ROSManager(bridgeport, mjpegport)
+    function addelement(ros, elem, plot) {
+        var topics = elem.getAttribute('topic').split(/\s*,\s*/)
+        var res = new plot.plot(ros, topics)
 
-    var elements = []
+        elem.style.setProperty('background-color', 'black')
 
-    for (var p = 0; p < plots.length; p++) {
-        var elems = document.getElementsByClassName(plots[p].name)
+        for (var a = 0; a < plot.params.length; a++) {
+            var param = elem.getAttribute(plot.params[a])
 
-        for (var e = 0; e < elems.length; e++) {
-            var canvas = elems[e]
-            var topics = canvas.getAttribute('topic').split(/\s*,\s*/)
-            var ctx = canvas.getContext('2d')
-            var plot = new plots[p].plot(ros, topics)
+            if (param)
+                res[plot.params[a]] = eval(param)
+        }
+        
+        return function() {
+            elem.width = elem.width
 
-            ctx.width = canvas.width
-            ctx.height = canvas.height
-            canvas.style.setProperty('background-color', 'black')
+            var ctx = elem.getContext('2d')
+            ctx.width = elem.width
+            ctx.height = elem.height
 
-            for (var a = 0; a < plots[p].params.length; a++) {
-                var param = canvas.getAttribute(plots[p].params[a])
+            res.render(ctx)
+        }
+    }
 
-                if (param) {
-                    plot[plots[p].params[a]] = eval(param)
-                }
+    function roswebkit(bridgeport, mjpegport) {
+        var ros = new ROSManager(bridgeport, mjpegport)
+
+        var elements = []
+
+        for (var p = 0; p < plots.length; p++) {
+            var elems = document.getElementsByClassName(plots[p].name)
+
+            for (var e = 0; e < elems.length; e++) {
+                elements.push(addelement(ros, elems[e], plots[p]))
             }
-            
-            elements.push(function() {
-                canvas.width = canvas.width
-                plot.render(ctx)
-            })
-        }
-    }
-
-    var frame = function() {
-        for (var i = 0; i < elements.length; i++) {
-            elements[i]();
         }
 
-        requestFrame(frame)
+        function frame() {
+            for (var i = 0; i < elements.length; i++) {
+                elements[i]()
+            }
+
+            requestFrame(frame)
+        }
+
+        frame()
     }
 
-    requestFrame(frame)
-}
+    return roswebkit
+})();

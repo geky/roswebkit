@@ -6,6 +6,7 @@
  *
  * params:
  *  quality: quality of compression from 1 to 100
+ *  invert: invert the image
  */
 
 var ROSWatch = (function() {

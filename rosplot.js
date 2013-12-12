@@ -56,7 +56,7 @@ var ROSPlot = (function() {
 
         this.topics.push(topic)
 
-        if (this.topics.length = 1)
+        if (this.topics.length == 1)
             this.title = name
     }
 
