@@ -23,12 +23,11 @@ var ROSPlot = (function() {
         this.maxy = null
         this.buffer = 5
 
-        if (topics instanceof Array) {
-            for (var i = 0; i < topics.length; i++) {
-                this.addplot(topics[i])
-            }
-        } else {
-            this.addplot(topics)
+        if (!(topics instanceof Array))
+            topics = topics.split(/\s*,\s*/)
+
+        for (var i = 0; i < topics.length; i++) {
+            this.addplot(topics[i])
         }
     }
 

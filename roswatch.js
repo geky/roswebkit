@@ -10,12 +10,15 @@
  */
 
 var ROSWatch = (function() {
-    function ROSWatch(ros, topic) {
+    function ROSWatch(ros, topics) {
         this.ros = ros
-        this.topic = topic
 
+        if (!(topics instanceof Array))
+            topics = topics.split(/\s*,\s*/)
+
+        this.topic = topics[0]
+        this.title = this.topic
         this.image = new Image()
-        this.title = topic
     }
 
     ROSWatch.prototype.render = function(ctx) {

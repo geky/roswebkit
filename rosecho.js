@@ -7,13 +7,16 @@
  */
 
 var ROSEcho = (function() {
-    function ROSEcho(ros, topic) {
-        this.ros = ros
-        this.topic = topic
-
+    function ROSEcho(ros, topics) {
         var self = this
+        this.ros = ros
 
-        this.ref = this.ros.subscribe(topic, function(data) {
+        if (!(topics instanceof Array))
+            topics = topics.split(/\s*,\s*/)
+
+        this.topic = topics[0]
+
+        this.ref = this.ros.subscribe(this.topic, function(data) {
             self.message = data
         })
     }
