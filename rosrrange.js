@@ -6,6 +6,7 @@
  *
  * params:
  *  fill: filled rendering
+ *  invert: invert the range data
  *  max: maximum value
  *  deg: rendering angle
  *  buffer: size of buffer in seconds
@@ -138,11 +139,20 @@ var ROSRRange = (function() {
             ctx.beginPath();
             ctx.moveTo(center, max_my)
 
-            for (var ii = 0; ii < topics[i].values.length; ii++,count++) {
-                ctx.arc(center, max_my, 
-                        max_r * (topics[i].values[ii]/max_value), 
-                        (count  )*width + Math.PI - dr,
-                        (count+1)*width + Math.PI - dr);
+            if (this.invert) {
+                for (var ii=0; ii<topics[i].values.length; ii++,count++) {
+                    ctx.arc(center, max_my,
+                            max_r * (topics[i].values[ii]/max_value),
+                            2*Math.PI - (count+1)*width + dr,
+                            2*Math.PI - (count  )*width + dr);
+                }
+            } else {
+                for (var ii=0; ii<topics[i].values.length; ii++,count++) {
+                    ctx.arc(center, max_my, 
+                            max_r * (topics[i].values[ii]/max_value), 
+                            (count  )*width + Math.PI - dr,
+                            (count+1)*width + Math.PI - dr);
+                }
             }
 
             if (this.fill)

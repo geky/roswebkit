@@ -7,6 +7,7 @@
  * params:
  *  zero: display zero line
  *  fill: filled rendering
+ *  invert: invert the range data
  *  min: minimum value
  *  max: maximum value
  *  buffer: size of buffer in seconds
@@ -160,7 +161,7 @@ var ROSRange = (function() {
         ctx.fillText(ros.stringize(value),     min_x-33, y+3);
         ctx.fillText(ros.stringize(max_value), min_x-33, min_y+6);
 
-        var width = (max_x-min_x+3)/count
+        var width = (max_x-min_x)/count
         count = 0
 
         for (var i = 0; i < topics.length; i++) {
@@ -168,18 +169,35 @@ var ROSRange = (function() {
             ctx.fillStyle = topics[i].color;
 
             ctx.beginPath();
-            ctx.moveTo(min_x, yy)
 
-            for (var ii = 0; ii < topics[i].values.length; ii++,count++) {
-                var v = topics[i].values[ii]
-                v = (v-min_value) / (max_value-min_value)
-                v = ((1-v)*(max_y-min_y)) + min_y
+            if (this.invert) {
+                ctx.moveTo(max_x, yy)
 
-                ctx.lineTo(min_x + (count  )*width, v)
-                ctx.lineTo(min_x + (count+1)*width, v)
+                for (var ii=0; ii<topics[i].values.length; ii++,count++) {
+                    var v = topics[i].values[ii]
+                    v = (v-min_value) / (max_value-min_value)
+                    v = ((1-v)*(max_y-min_y)) + min_y
+
+                    ctx.lineTo(max_x - (count  )*width, v)
+                    ctx.lineTo(max_x - (count+1)*width, v)
+                }
+
+                ctx.lineTo(min_x, yy)
+            } else {
+                ctx.moveTo(min_x, yy)
+
+                for (var ii=0; ii<topics[i].values.length; ii++,count++) {
+                    var v = topics[i].values[ii]
+                    v = (v-min_value) / (max_value-min_value)
+                    v = ((1-v)*(max_y-min_y)) + min_y
+
+                    ctx.lineTo(min_x + (count  )*width, v)
+                    ctx.lineTo(min_x + (count+1)*width, v)
+                }
+
+                ctx.lineTo(max_x, yy)
             }
 
-            ctx.lineTo(max_x, yy)
             if (this.fill)
                 ctx.fill()
             else

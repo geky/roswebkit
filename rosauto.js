@@ -16,11 +16,11 @@ var roswebkit = (function() {
         },
         { name: 'rosrange', 
           plot: ROSRange,
-          params: ['zero', 'fill', 'min', 'max', 'buffer']
+          params: ['zero', 'fill', 'invert', 'min', 'max', 'buffer']
         },
         { name: 'rosrrange', 
           plot: ROSRRange,
-          params: ['fill', 'max', 'deg', 'buffer']
+          params: ['fill', 'invert', 'max', 'deg', 'buffer']
         },
         { name: 'rosecho', 
           plot: ROSEcho,
