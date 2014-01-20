@@ -2,14 +2,7 @@
 TARGET = roswebkit
 
 # Input Files 
-SRC += rosman.js
-SRC += rosecho.js
-SRC += rosplot.js
-SRC += rosplot2.js
-SRC += rosrange.js
-SRC += rosrrange.js
-SRC += roswatch.js
-SRC += rosauto.js
+SRC += $(wildcard src/*.js)
 
 # Online Dependencies
 DEP += http://cdn.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js
