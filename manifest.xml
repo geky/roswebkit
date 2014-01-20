@@ -1,0 +1,13 @@
+<package>
+  <description brief="roswebkit">
+     Canvas based kit of ROS tools for headless robots
+  </description>
+
+  <author email="chaster@utexas.edu">Christopher Haster</author>
+
+  <url>http://github.com/geky/roswebkit</url>
+  <license>MIT</license>
+
+  <depend package="rosbridge_server"/>
+  <depend package="mjpeg_server"/>
+</package>
