@@ -41,6 +41,28 @@ var roswebkit = (function() {
         function(callback) { setInterval(callback, 100); } 
     );
 
+
+    function flatten() {
+        for (var p = 0; p < plots.length; p++) {
+            var elems = document.getElementsByTagName(plots[p].name)
+
+            for (var e = 0; e < elems.length; e++) {
+                var parent = elems[e].parentElement
+                var attr = elems[e].attributes
+                var canvas = document.createElement('canvas')
+
+                for (var a = 0; a < attr.length; a++) {
+                    canvas.setAttribute(attr[a].name, attr[a].value)
+                }
+
+                canvas.innerHTML = elems[e].innerHTML
+                canvas.classList.add(plots[p].name)
+
+                parent.replaceChild(canvas, elems[e])
+            }
+        }
+    }
+
     function addelement(ros, elem, plot) {
         var topics = elem.getAttribute('topic').split(/\s*,\s*/)
         var res = new plot.plot(ros, topics)
@@ -67,8 +89,9 @@ var roswebkit = (function() {
 
     function roswebkit(bridgeport, mjpegport) {
         var ros = new ROSManager(bridgeport, mjpegport)
-
         var elements = []
+
+        flatten()
 
         for (var p = 0; p < plots.length; p++) {
             var elems = document.getElementsByClassName(plots[p].name)

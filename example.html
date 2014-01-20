@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>roswebkit</title>
     <script src=roswebkit.min.js></script>
 </head>
 <body onload=roswebkit(9090) style=background-color:#555>
     <div style=float:left;margin-right:5px>
-        <canvas class=rosplot2 topic=/scan.ranges[10],/scan.ranges[20]
-                buffer=10 width=200 height=605>
-        </canvas>
+        <rosplot2 topic=/scan.ranges[10],/scan.ranges[20]
+                  buffer=10 width=200 height=605>
+        </rosplot2>
     </div>
     <div>
-        <canvas class=rosrrange topic=/scan.ranges width=800 height=300></canvas>
-        <canvas class=rosrange topic=/scan.ranges width=800 height=300></canvas>
+        <rosrrange topic=/scan.ranges width=800 height=300></rosrrange>
+        <rosrange topic=/scan.ranges width=800 height=300></rosrange>
     </div>
 </body>
 </html>
