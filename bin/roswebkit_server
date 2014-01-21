@@ -1,0 +1,41 @@
+#!/usr/bin/env python2
+import rospy
+import signal
+
+from BaseHTTPServer import HTTPServer
+from SimpleHTTPServer import SimpleHTTPRequestHandler
+
+
+class RWKServer(HTTPServer):
+    def serve_forever(self):
+        while not rospy.is_shutdown():
+            try:
+                self.handle_request()
+            except:
+                pass
+
+class RWKHandler(SimpleHTTPRequestHandler):
+    def log_request(self, code='-', size='-'):
+        rospy.loginfo('%s: "%s" %s %s',
+                      self.address_string(),
+                      self.requestline,
+                      str(code), str(size))
+
+    def log_error(self, format, *args):
+        rospy.logwarn(format, *args)
+
+
+def main():
+    rospy.init_node('roswebkit_server')
+
+    port = rospy.get_param('port', 7000)
+    host = rospy.get_param('host', '')
+
+    http = RWKServer((host, port), RWKHandler)
+
+    rospy.loginfo('Serving ROSWebKit on port %s...', port)
+    http.serve_forever()
+
+
+if __name__ == '__main__':
+    main()

@@ -8,6 +8,7 @@
   <url>http://github.com/geky/roswebkit</url>
   <license>MIT</license>
 
+  <depend package="rospy"/>
   <depend package="rosbridge_server"/>
   <depend package="mjpeg_server"/>
 </package>
