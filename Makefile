@@ -1,8 +1,17 @@
 # Makefile for roswebkit
 TARGET = roswebkit
 
+
 # Input Files 
-SRC += $(wildcard src/*.js)
+SRC += rosman.js
+SRC += rosecho.js
+SRC += rosplot.js
+SRC += rosplot2.js
+SRC += rosrange.js
+SRC += rosrrange.js
+SRC += roswatch.js
+SRC += rosauto.js
+SRC := $(addprefix src/, $(SRC))
 
 # Online Dependencies
 DEP += http://cdn.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js
@@ -12,11 +21,15 @@ DEP += http://cdn.robotwebtools.org/roslibjs/current/roslib.min.js
 MFLAGS += --level=1
 MFLAGS += --minify
 
-# Rules
-all: $(TARGET).min.js
 
-run: $(TARGET).js
-	python -m SimpleHTTPServer
+# Rules
+all: $(TARGET).js $(TARGET).min.js
+
+run: $(TARGET).min.js
+	python -m SimpleHTTPServer 7000
+
+clean:
+	-rm roswebkit*js
 
 $(TARGET).js: $(SRC)
 	cat $^ > $@

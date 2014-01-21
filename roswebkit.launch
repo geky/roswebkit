@@ -1,0 +1,24 @@
+<launch>
+  <!-- primary arguments are for port assignment -->
+  <!-- if ports are not sequential, make sure they are 
+       correctly passed to the roswebkit function call in
+       the html files -->
+  <arg name="port" default="7000"/>
+  <arg name="bridge_port" default="7001"/>
+  <arg name="mjpeg_port" default="7002"/>
+
+  <!-- run rosbridge for connecting to ros -->
+  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch">
+    <arg name="port" value="$(arg bridge_port)"/>
+  </include>
+
+  <!-- run mjpeg_server for video streams -->
+  <node pkg="mjpeg_server" type="mjpeg_server" name="mjpeg_server">
+    <param name="_port" value="$(arg mjpeg_port)"/>
+  </node>
+
+  <!-- run the roswebkit server for hosting files -->
+  <node pkg="roswebkit" type="roswebkit" name="roswebkit">
+    <param name="port" value="$(arg port)"/>
+  </node>
+</launch>
