@@ -1150,21 +1150,24 @@ var roswebkit = (function() {
 
     function flatten() {
         for (var p = 0; p < plots.length; p++) {
-            var elems = document.getElementsByTagName(plots[p].name)
+            while (true) {
+                var elem = document.getElementsByTagName(plots[p].name)[0]
 
-            for (var e = 0; e < elems.length; e++) {
-                var parent = elems[e].parentElement
-                var attr = elems[e].attributes
+                if (!elem)
+                    break
+
+                var parent = elem.parentElement
+                var attr = elem.attributes
                 var canvas = document.createElement('canvas')
 
                 for (var a = 0; a < attr.length; a++) {
                     canvas.setAttribute(attr[a].name, attr[a].value)
                 }
 
-                canvas.innerHTML = elems[e].innerHTML
+                canvas.innerHTML = elem.innerHTML
                 canvas.classList.add(plots[p].name)
 
-                parent.replaceChild(canvas, elems[e])
+                parent.replaceChild(canvas, elem)
             }
         }
     }

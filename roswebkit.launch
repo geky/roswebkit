@@ -18,7 +18,8 @@
   </node>
 
   <!-- run the roswebkit server for hosting files -->
-  <node pkg="roswebkit" type="roswebkit_server" name="roswebkit_server">
+  <node pkg="roswebkit" type="roswebkit_server" name="roswebkit_server" 
+        output="screen">
     <param name="port" value="$(arg port)"/>
   </node>
 </launch>

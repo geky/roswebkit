@@ -1,6 +1,8 @@
 #!/usr/bin/env python2
 import rospy
+import roslib
 import signal
+import os
 
 from BaseHTTPServer import HTTPServer
 from SimpleHTTPServer import SimpleHTTPRequestHandler
@@ -31,6 +33,11 @@ def main():
     port = rospy.get_param('port', 7000)
     host = rospy.get_param('host', '')
 
+    dir = roslib.packages.get_pkg_dir('roswebkit')
+    dir = os.path.join(dir, 'http')
+    dir = rospy.get_param('dir', dir)
+    os.chdir(dir)
+ 
     http = RWKServer((host, port), RWKHandler)
 
     rospy.loginfo('Serving ROSWebKit on port %s...', port)
