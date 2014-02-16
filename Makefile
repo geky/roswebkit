@@ -10,6 +10,7 @@ SRC += rosplot2.js
 SRC += rosrange.js
 SRC += rosrrange.js
 SRC += roswatch.js
+SRC += rosmap.js
 SRC += rosauto.js
 SRC := $(addprefix src/, $(SRC))
 

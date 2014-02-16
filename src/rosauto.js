@@ -30,6 +30,10 @@ var roswebkit = (function() {
           plot: ROSWatch,
           params: ['quality', 'invert']
         },
+        { name: 'rosmap',
+          plot: ROSMap,
+          params: ['lines', 'zoom', 'type', 'buffer']
+        }
     ]
 
     var requestFrame = (
